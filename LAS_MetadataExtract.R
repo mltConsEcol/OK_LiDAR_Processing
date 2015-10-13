@@ -14,7 +14,7 @@ system.time(for(i in 1:length(lf)){
   
   las.filedata[i, "FileName"] <- paste(lf[i])
   
-  tmp <- system(paste("lasinfo", lf[i], sep=" "), intern=TRUE, wait=FALSE)[c(16,20,21,30)]
+  tmp <- system(paste('lasinfo "', lf[i], '"', sep=''), intern=TRUE, wait=FALSE)[c(16,20,21,30)]
   
   las.filedata[i, "epsg"] <- as.integer(substring(tmp[4], 57, unlist(gregexpr(pattern =' - ',tmp[4]))[1]))
   las.filedata[i,"NumPoints"] <- as.integer(unlist(strsplit(tmp[1], split="   *"))[3])
@@ -41,7 +41,7 @@ cl<- makeCluster(8)
 registerDoParallel(cl)
 
 system.time(epsg <- foreach(i= 1:length(lf)) %dopar% {
-  tmp <-  system(paste("lasinfo", lf[i], sep=" "), intern=TRUE, wait=FALSE)[c(16,20,21,30)]
+  tmp <- system(paste('lasinfo "', lf[i], '"', sep=''), intern=TRUE, wait=FALSE)[c(16,20,21,30)]
   as.integer(substring(tmp[4], 57, unlist(gregexpr(pattern =' - ',tmp[4]))[1]))
 }
 )
