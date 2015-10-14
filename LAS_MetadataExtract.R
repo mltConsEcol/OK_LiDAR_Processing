@@ -4,7 +4,7 @@ setwd("M:/OK_LiDAR/RCode_Testing") #Practice folder (7 las files total)
 #setwd("M:/OK_LiDAR/OK_LAS_data/OK_DamRehab_Assessment_2011") #Actual data we'll work on, containing ~9000 las files
 
 #Create list of las files
-system.time(lf <- list.files(pattern="*.las$", full.name=TRUE, include.dirs=TRUE, recursive=TRUE))
+lf <- list.files(pattern="*.las$", full.name=TRUE, include.dirs=TRUE, recursive=TRUE)
 
 ###If testing on a larger subset (the second and third setwd options), 
 ### best to use the line below as the full list of files is HUGE (the above line takes ~5 min on full folder)
@@ -74,5 +74,6 @@ stopCluster(cl)
 #view result
 head(las.metadata)
 
-#Last thing needed is to redefine column types
+#Last thing needed is to redefine column types appropriately, since dopar works with matrices
+# and all columns are stored as character data.
 
