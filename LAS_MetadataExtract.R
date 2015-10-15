@@ -4,11 +4,11 @@ setwd("M:/OK_LiDAR/RCode_Testing") #Practice folder (7 las files total)
 #setwd("M:/OK_LiDAR/OK_LAS_data/OK_DamRehab_Assessment_2011") #Actual data we'll work on, containing ~9000 las files
 
 #Create list of las files
-lf <- list.files(pattern="*.las$", full.name=TRUE, include.dirs=TRUE, recursive=TRUE)
+lf <- list.files(pattern="\\.las$", full.name=TRUE, include.dirs=TRUE, recursive=TRUE)
 
 ###If testing on a larger subset (the second and third setwd options), 
 ### best to use the line below as the full list of files is HUGE (the above line takes ~5 min on full folder)
-#lf <- list.files(pattern="*.las$", full.name=TRUE, include.dirs=FALSE)[1:100]
+#lf <- list.files(pattern="\\.las$", full.name=TRUE, include.dirs=FALSE)[1:100]
 
 #Create dataframe to be filled in in the loop
 las.filedata <- data.frame(FileName=as.character(rep(NA, length(lf))),
