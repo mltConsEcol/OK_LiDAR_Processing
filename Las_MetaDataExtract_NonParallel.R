@@ -1,5 +1,5 @@
 #Set working directory
-setwd("M:/OK_LiDAR/RCode_Testing") #Practice folder (7 las files total)
+setwd("M:/OK_LiDAR/RCode_Testing") #Practice folder (8 las files total)
 setwd("M:/OK_LiDAR/OK_LAS_data") #Full data
 #setwd("M:/OK_LiDAR/OK_LAS_data/OK_DamRehab_Assessment_2011") #Actual data we'll work on, containing ~9000 las files
 
@@ -18,6 +18,7 @@ las.filedata <- data.frame(FileName=as.character(rep(NA, length(lf))),
                            xmax=as.numeric(rep(NA, length(lf))),
                            ymin=as.numeric(rep(NA, length(lf))), 
                            ymax=as.numeric(rep(NA, length(lf))), 
+                           PointSpacing=as.numeric(rep(NA, length(lf))), 
                            stringsAsFactors=FALSE)
 
 
@@ -28,22 +29,29 @@ system.time(for(i in 1:length(lf)){
   
   las.filedata[i, "FileName"] <- paste(lf[i])
   
-  tmp <- system(paste('cmd /c lasinfo "', lf[i], '"', sep=''), intern=TRUE, wait=FALSE)
+  tmp <- system(paste('cmd /c lasinfo "', lf[i], '" -cd 2>&1', sep=''), intern=TRUE, wait=FALSE)
   
-  tmp <- tmp[c(grep(pattern='number of point records', tmp),
-               grep(pattern='min x y z', tmp),
-               grep(pattern='max x y z', tmp), 
-               grep(pattern='key 3072', tmp))]
+  tmp2 <- list(length=5)
   
-  las.filedata[i, "epsg"] <- as.integer(substring(tmp[4], 57, unlist(gregexpr(pattern =' - ',tmp[4]))[1]))
-  las.filedata[i,"NumPoints"] <- as.integer(unlist(strsplit(tmp[1], split="   *"))[3])
-  las.filedata[i, "xmin"] <- as.numeric(unlist(strsplit(tmp[2], " * "))[6])
-  las.filedata[i, "xmax"] <- as.numeric(unlist(strsplit(tmp[3], " * "))[6])
-  las.filedata[i, "ymin"] <- as.numeric(unlist(strsplit(tmp[2], " * "))[7])
-  las.filedata[i, "ymax"] <- as.numeric(unlist(strsplit(tmp[3], " * "))[7])
+  tmp2[1] <- tmp[(grep(pattern='number of point records', tmp))]
+  tmp2[2] <- tmp[(grep(pattern='min x y z', tmp))]#,
+  tmp2[3] <- tmp[(grep(pattern='max x y z', tmp))]#, 
+  tmp2[4] <- ifelse(length(tmp[(grep(pattern='key 3072', tmp))])==0, NA, tmp[(grep(pattern='key 3072', tmp))])#,,  finally=return(NA))#error=function(e) {return(NA)})#,
+  tmp2[5] <- tmp[(grep(pattern='spacing:', tmp))]
+  
+  tmp2 <- unlist(tmp2)
+  
+  las.filedata[i, "epsg"] <- as.integer(substring(tmp2[4], 57, unlist(gregexpr(pattern =' - ',tmp2[4]))[1]))
+  las.filedata[i,"NumPoints"] <- as.integer(unlist(strsplit(tmp2[1], split="   *"))[3])
+  las.filedata[i, "xmin"] <- as.numeric(unlist(strsplit(tmp2[2], " * "))[6])
+  las.filedata[i, "xmax"] <- as.numeric(unlist(strsplit(tmp2[3], " * "))[6])
+  las.filedata[i, "ymin"] <- as.numeric(unlist(strsplit(tmp2[2], " * "))[7])
+  las.filedata[i, "ymax"] <- as.numeric(unlist(strsplit(tmp2[3], " * "))[7])
+  las.filedata[i, "PointSpacing"] <- as.numeric(unlist(strsplit(tmp2[5], " * "))[5])
+  
   rm(tmp)
 }
 )
 
 #View result
-las.filedata
+head(las.filedata)
