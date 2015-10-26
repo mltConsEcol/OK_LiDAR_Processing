@@ -1,5 +1,5 @@
 #Set working directory
-#setwd("M:/OK_LiDAR/RCode_Testing") #Practice folder (7 las files total)
+setwd("M:/OK_LiDAR/RCode_Testing") #Practice folder (7 las files total)
 setwd("M:/OK_LiDAR/OK_LAS_data") #Full data
 #setwd("M:/OK_LiDAR/OK_LAS_data/OK_DamRehab_Assessment_2011") #Actual data we'll work on, containing ~9000 las files
 
@@ -21,7 +21,13 @@ registerDoParallel(cl)
 
 system.time(las.metadata <- foreach(i= 1:length(lf), .combine=rbind) %dopar% {
   
-  tmp <- system(paste('cmd /c lasinfo  "', lf[i], '" 2>&1', sep=''), intern=TRUE, wait=FALSE)[c(16,20,21,30)]
+  tmp <- system(paste('cmd /c lasinfo  "', lf[i], '" 2>&1', sep=''), intern=TRUE, wait=FALSE)
+  
+  tmp <- tmp[c(grep(pattern='number of point records', tmp),
+               grep(pattern='min x y z', tmp),
+               grep(pattern='max x y z', tmp), 
+               grep(pattern='key 3072', tmp))]
+  
   FileName <- paste(lf[i])
   epsg <- (substring(tmp[4], 57, unlist(gregexpr(pattern =' - ',tmp[4]))[1]))
   NumPoints <- (unlist(strsplit(tmp[1], split="   *"))[3])
