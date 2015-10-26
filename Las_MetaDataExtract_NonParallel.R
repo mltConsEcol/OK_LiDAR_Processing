@@ -1,6 +1,6 @@
 #Set working directory
 setwd("M:/OK_LiDAR/RCode_Testing") #Practice folder (8 las files total)
-setwd("M:/OK_LiDAR/OK_LAS_data") #Full data
+#setwd("M:/OK_LiDAR/OK_LAS_data") #Full data
 #setwd("M:/OK_LiDAR/OK_LAS_data/OK_DamRehab_Assessment_2011") #Actual data we'll work on, containing ~9000 las files
 
 #Create list of las files
