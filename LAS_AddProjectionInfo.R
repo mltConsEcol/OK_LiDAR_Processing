@@ -3,7 +3,7 @@
 setwd("M:/OK_LiDAR/OK_LAS_data")
 
 #Load metadata file
-las.meta <- read.csv("LAS_Metadata.csv")
+las.meta <- read.csv("LAS_Metadata_ORIG.csv")
 
 #Get 
 las.meta.noEPSG <- as.character(las.meta[is.na(las.meta$epsg),1])
