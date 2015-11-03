@@ -30,6 +30,8 @@ system.time(las.metadata <- foreach(i= 1:length(lf), .combine=rbind) %dopar% {
   tmp2[3] <- tmp[(grep(pattern='max x y z', tmp))]#, 
   tmp2[4] <- ifelse(length(tmp[(grep(pattern='key 3072', tmp))])==0, NA, tmp[(grep(pattern='key 3072', tmp))])#,,  finally=return(NA))#error=function(e) {return(NA)})#,
   tmp2[5] <- tmp[(grep(pattern='spacing:', tmp))]
+  tmp2[6] <- tmp[(grep(pattern='return_number', tmp))]
+  
   
   tmp2 <- unlist(tmp2)
   
@@ -41,8 +43,10 @@ system.time(las.metadata <- foreach(i= 1:length(lf), .combine=rbind) %dopar% {
   ymin <- unlist(strsplit(tmp2[2], " * "))[7]
   ymax <- unlist(strsplit(tmp2[3], " * "))[7]
   PointSpacing <- unlist(strsplit(tmp2[5], " * "))[5]
+  FirstReturnOnly <- ifelse(unlist(strsplit(tmp2[6], " * "))[4]==1, 1, 0)
   
-  cbind(FileName, epsg, NumPoints, xmin, xmax, ymin, ymax, PointSpacing)
+  
+  cbind(FileName, epsg, NumPoints, xmin, xmax, ymin, ymax, PointSpacing, FirstReturnOnly)
   
 }
 )
@@ -64,13 +68,13 @@ las.metadata$xmax <- as.numeric(las.metadata$xmax)
 las.metadata$ymin <- as.numeric(las.metadata$ymin)
 las.metadata$ymax <- as.numeric(las.metadata$ymax)
 las.metadata$PointSpacing <- as.numeric(las.metadata$PointSpacing)
+las.metadata$FirstReturnOnly <- as.integer(las.metadata$FirstReturnOnly)
+
 
 
 str(las.metadata)
 head(las.metadata)
 tail(las.metadata)
-
-
 
 
 #write.csv(las.metadata,"LAS_Metadata.csv", row.names=FALSE)
