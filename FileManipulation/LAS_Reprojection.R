@@ -15,7 +15,7 @@
 
 
 
-batch.reproj.las <- function(path=path, epsg=epsg, cores=cores, out=out){
+las.batch.reproj <- function(path=path, epsg=epsg, cores=cores, out=out){
   
   #import libraries
   library(foreach)
