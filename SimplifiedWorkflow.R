@@ -8,6 +8,8 @@
 # Import function to run extract metadata from all .las files in directory
 source("L:/OK_LiDAR_Processing/Metadata_Read_Edit/LAS_MetadataExtract.R")
 
+source("L:/OK_LiDAR_Processing/FileManipulation/LAS_Reprojection.R")
+
 setwd("M:/OK_LiDAR/OK_LAS_data")
 
 ## Get Metadata prior on original directory, after all files are uncompressed
@@ -16,6 +18,10 @@ setwd("M:/OK_LiDAR/OK_LAS_data")
 ## Assign EPSG code for files w/out it in the metadata, based on inspections of those datasets
 ## This is not a function - just a script, as it is fairly specific to these data.
 #system.time(source("L:/OK_LiDAR_Processing/Metadata_Read_Edit/LAS_AddProjectionInfo.R"))
+
+## Reproject Files
+#system.time(ReprojLog <- las.batch.reproj(path=getwd(), epsg=26914, cores=8, out="reprojectionLog.csv"))
+
 
 
 ###############
