@@ -3,6 +3,11 @@
 # Function to extract metadata from .las files and output them to R object and .csv file
 # Writen by Mike Treglia, mike-treglia@utulsa.edu
 # Tested on R version 3.1.3 x64 on Windows 8
+#
+# Example Code
+# setwd("M:/OK_LiDAR/RCode_Testing")
+# system.time(test <- las.metadataExtract(getwd(), 6)) #don't write out metadata
+# system.time(test <- las.metadataExtract(path=getwd(), cores=6, out="testmeta1.csv"))
 ################
 
 las.metadataExtract <- function(path=path, cores=cores, out=out){
@@ -11,11 +16,8 @@ las.metadataExtract <- function(path=path, cores=cores, out=out){
   library(foreach)
   library(doParallel)
   
-  #Set working directory
-  setwd(path)
-  
   #Create list of las files
-  lf <- list.files(pattern="\\.las$", full.name=TRUE, include.dirs=TRUE, recursive=TRUE)
+  lf <- list.files(path=path, pattern="\\.las$", full.name=TRUE, include.dirs=TRUE, recursive=TRUE)
   
   #Start parallel processing
   cl<- makeCluster(cores)
@@ -28,9 +30,9 @@ las.metadataExtract <- function(path=path, cores=cores, out=out){
       tmp2 <- list(length=5)
       
       tmp2[1] <- tmp[(grep(pattern='number of point records', tmp))]
-      tmp2[2] <- tmp[(grep(pattern='min x y z', tmp))]#,
-      tmp2[3] <- tmp[(grep(pattern='max x y z', tmp))]#, 
-      tmp2[4] <- ifelse(length(tmp[(grep(pattern='key 3072', tmp))])==0, NA, tmp[(grep(pattern='key 3072', tmp))])#,,  finally=return(NA))#error=function(e) {return(NA)})#,
+      tmp2[2] <- tmp[(grep(pattern='min x y z', tmp))]
+      tmp2[3] <- tmp[(grep(pattern='max x y z', tmp))] 
+      tmp2[4] <- ifelse(length(tmp[(grep(pattern='key 3072', tmp))])==0, NA, tmp[(grep(pattern='key 3072', tmp))])
       tmp2[5] <- tmp[(grep(pattern='spacing:', tmp))]
       tmp2[6] <- tmp[(grep(pattern='return_number', tmp))]
       
@@ -75,7 +77,3 @@ las.metadataExtract <- function(path=path, cores=cores, out=out){
   
 }
 
-##Example Code
-#setwd("M:/OK_LiDAR/RCode_Testing")
-#test <- las.metadataExtract(getwd(), 8) #don't write out metadata
-# system.time(test <- las.metadataExtract(path=getwd(), cores=8, out="testmeta1.csv"))
