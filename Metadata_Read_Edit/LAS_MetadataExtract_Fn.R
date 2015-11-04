@@ -21,7 +21,7 @@ las.metadataExtract <- function(path=path, cores=cores, out=out){
   cl<- makeCluster(cores)
   registerDoParallel(cl)
   
-  system.time(las.metadata <- foreach(i= 1:length(lf), .combine=rbind) %dopar% {
+  las.metadata <- foreach(i= 1:length(lf), .combine=rbind) %dopar% {
     
       tmp <- system(paste('cmd /c lasinfo  "', lf[i], '" -cd 2>&1', sep=''), intern=TRUE, wait=FALSE)
       
@@ -51,7 +51,6 @@ las.metadataExtract <- function(path=path, cores=cores, out=out){
       cbind(FileName, epsg, NumPoints, xmin, xmax, ymin, ymax, PointSpacing, FirstReturnOnly)
     
   }
-  )
   
   stopCluster(cl)
   
