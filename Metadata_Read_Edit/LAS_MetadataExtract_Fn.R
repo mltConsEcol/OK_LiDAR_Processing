@@ -1,5 +1,9 @@
-#Function 
-
+#################
+# las.metadataExtract(path, cores, out)
+# Function to extract metadata from .las files and output them to R object and .csv file
+# Writen by Mike Treglia, mike-treglia@utulsa.edu
+# Tested on R version 3.1.3 x64 on Windows 8
+################
 
 las.metadataExtract <- function(path=path, cores=cores, out=out){
   
