@@ -6,7 +6,7 @@
 ###############
 
 # Import function to run extract metadata from all .las files in directory
-source("L:/OK_LiDAR_Processing/Metadata_Read_Edit/LAS_MetadataExtract_Fn.R")
+source("L:/OK_LiDAR_Processing/Metadata_Read_Edit/LAS_MetadataExtract.R")
 
 setwd("M:/OK_LiDAR/OK_LAS_data")
 
@@ -21,6 +21,7 @@ setwd("M:/OK_LiDAR/OK_LAS_data")
 ###############
 # Next to be developed/run
 #   * Check metadata and if not projection not EPSG 26914, reproject to that; if no projection data, leave it
+#     * Code written - see LAS_Reprojection.R
 #   * Re-run metadata extraction - perhaps only for files w/ EPSG 26914(?)
 #   * For each file create minimum concave polygon... put everything into a single shapefile or geojson or similar
 #     * Have all .las files somehow indexed to respective polygons for spatial query
