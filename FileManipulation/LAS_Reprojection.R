@@ -10,7 +10,7 @@
 # path <- getwd()
 # epsg=26914
 # 
-# system.time(test <- batch.reproj.las(path=getwd(), epsg=26914, cores=8, out="reprojTestLog.csv"))
+# system.time(test <- las.batch.reproj(path=getwd(), epsg=26914, cores=8, out="reprojTestLog.csv"))
 ################
 
 

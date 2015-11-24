@@ -4,13 +4,18 @@
 # Writen by Mike Treglia, mike-treglia@utulsa.edu
 # Tested on R version 3.1.3 x64 on Windows 8
 #Example Code
+#
+# source("../../../data/users/mtreglia/OK_LiDAR_Processing/FileManipulation/LAS_Reprojection_unix.R")
+# source("../../../data/users/mtreglia/OK_LiDAR_Processing/Metadata_Read_Edit/LAS_MetadataExtract_unix.R")
+#
 # Set Working Directory
 # setwd("M:/OK_LiDAR/RCode_Testing")
+# setwd("../../../data/groups/OK_LiDAR/RCode_Testing/Mixed_RealFiles")
 #
 # path <- getwd()
 # epsg=26914
-# 
-# system.time(test <- batch.reproj.las(path=getwd(), epsg=26914, cores=8, out="reprojTestLog.csv"))
+# system.time(test1 <- las.metadataExtract(path=getwd(), cores=8, out="metadata.csv"))
+# system.time(test <- las.batch.reproj(path=getwd(), epsg=26914, cores=8, out="reprojTestLog.csv"))
 ################
 
 
