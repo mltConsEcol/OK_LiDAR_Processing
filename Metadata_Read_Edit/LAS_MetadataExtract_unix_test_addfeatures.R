@@ -2,7 +2,7 @@
 # las.metadataExtract(path, cores, out)
 # Function to extract metadata from .las files and output them to R object and .csv file
 # Writen by Mike Treglia, mike-treglia@utulsa.edu
-# Tested on R version 3.1.3 x64 on Windows 8
+# Tested on R version 3.2.1 x64 on Ubuntu 12.x Virtual Machine
 #
 # Example Code
 # setwd("../../../data/groups/OK_LiDAR/RCode_Testing")
