@@ -6,6 +6,7 @@
 #
 # Example Code
 # setwd("../../../data/groups/OK_LiDAR/RCode_Testing")
+# path <- getwd()
 # system.time(test <- las.metadataExtract(getwd(), 8)) #don't write out metadata
 # system.time(test <- las.metadataExtract(path=getwd(), cores=6, out="testmeta1.csv"))
 ################
@@ -27,7 +28,7 @@ las.metadataExtract <- function(path=path, cores=cores, out=out){
     
       tmp <- system(paste('lasinfo  "', lf[i], '" -cd 2>&1', sep=''), intern=TRUE, wait=FALSE)
       
-      tmp2 <- list(length=9)
+      tmp2 <- list()
       
       tmp2[1] <- tmp[(grep(pattern='number of point records', tmp))]
       tmp2[2] <- tmp[(grep(pattern='min x y z', tmp))]
@@ -39,6 +40,7 @@ las.metadataExtract <- function(path=path, cores=cores, out=out){
       tmp2[8] <- ifelse(length(tmp[(grep(pattern='key 3076', tmp))])==0, NA, tmp[(grep(pattern='key 3076', tmp))])
       tmp2[9] <- ifelse(length(tmp[(grep(pattern='key 3073', tmp))])==0, NA, tmp[(grep(pattern='key 3073', tmp))])
       tmp2[10] <- ifelse(length(tmp[(grep(pattern='key 4097', tmp))])==0, NA, tmp[(grep(pattern='key 4097', tmp))])
+      tmp2[11] <- ifelse(length(tmp[(grep(pattern='file creation day/year:', tmp))])==0, NA, tmp[(grep(pattern='file creation day/year:', tmp))])
       
       
       
@@ -61,9 +63,11 @@ las.metadataExtract <- function(path=path, cores=cores, out=out){
       FirstReturnOnly <- ifelse(unlist(strsplit(tmp2[6], " * "))[4]==1, 1, 0)
       HorizCRS_Txt <- (strsplit(tmp2[9], ": ")[[1]][2])
       VertCRS_Txt <- (strsplit(tmp2[10], ": ")[[1]][2])
+      CreateYear <- (strsplit(tmp2[11], c("/|:"))[[1]][4])
+      CreateDay <- (strsplit(tmp2[11], c("/|:"))[[1]][3])
       
       
-      cbind(FileName, epsgHoriz, epsgVert, VertUnitCode, NumPoints, xmin, xmax, ymin, ymax, zmin, zmax, PointSpacing, FirstReturnOnly, HorizCRS_Txt, VertCRS_Txt)
+      cbind(FileName, epsgHoriz, epsgVert, VertUnitCode, NumPoints, xmin, xmax, ymin, ymax, zmin, zmax, PointSpacing, FirstReturnOnly, HorizCRS_Txt, VertCRS_Txt, CreateYear, CreateDay)
     
   }
   
@@ -87,6 +91,8 @@ las.metadataExtract <- function(path=path, cores=cores, out=out){
   las.metadata$FirstReturnOnly <- as.integer(las.metadata$FirstReturnOnly)
   las.metadata$HorizCRS_Txt <- as.character(las.metadata$HorizCRS_Txt)
   las.metadata$VertCRS_Txt <- as.character(las.metadata$VertCRS_Txt)
+  las.metadata$CreateYear <- as.integer(las.metadata$CreateYear)
+  las.metadata$CreateDay <- as.integer(las.metadata$CreateDay)
   
   if(hasArg(out)==TRUE){
     write.csv(las.metadata, out, row.names=FALSE)
