@@ -22,6 +22,14 @@ setwd("M:/OK_LiDAR/OK_LAS_data")
 ## Reproject Files
 #system.time(ReprojLog <- las.batch.reproj(path=getwd(), epsg=26914, cores=8, out="reprojectionLog.csv"))
 
+##The above Reproject Files step failed mid-way through due to OSU HPCC problem, and some EPSG codes not recognized in LASTools
+## Summary of what was done should be able to be extracted from '20151110ReprjSummary.csv' and '20151110ReprjSummary_Flagged.csv' (created using 'L:/OK_Lidar_Processing/Misc_BashCode/CountLas_COuntReproj.sh' on linux VM)
+
+##Updated the metadata extract code on Unix to pull out creation date for files and vertical CRS info, as well as non-EPSG code based CRS string info.
+##Ran this function in Linux VM: 
+# source("../../../data/users/mtreglia/OK_Lidar_Processing/Metadata_Read_Edit/LAS_MetadataExtract_unix.R")
+# system.time(LAS_Metadata_PostFailedReprj <- las.metadataExtract(path=getwd(), cores=8, out="LAS_Metadata_PostFailedReprj_20151130.csv"))
+
 
 
 ###############
