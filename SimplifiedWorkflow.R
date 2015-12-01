@@ -27,8 +27,11 @@ setwd("M:/OK_LiDAR/OK_LAS_data")
 
 ##Updated the metadata extract code on Unix to pull out creation date for files and vertical CRS info, as well as non-EPSG code based CRS string info.
 ##Ran this function in Linux VM: 
-# source("../../../data/users/mtreglia/OK_Lidar_Processing/Metadata_Read_Edit/LAS_MetadataExtract_unix.R")
-# system.time(LAS_Metadata_PostFailedReprj <- las.metadataExtract(path=getwd(), cores=8, out="LAS_Metadata_PostFailedReprj_20151130.csv"))
+
+# setwd("~")
+# source("../../../data/users/mtreglia/OK_LiDAR_Processing/Metadata_Read_Edit/LAS_MetadataExtract_unix.R")
+# setwd("../../../data/groups/OK_LiDAR/OK_LAS_data/")
+# system.time(LAS_Metadata_PostFailedReprj <- las.metadataExtract(path=getwd(), cores=4, out="LAS_Metadata_PostFailedReprj_20151130.csv"))
 
 
 
