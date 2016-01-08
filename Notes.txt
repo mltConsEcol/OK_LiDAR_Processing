@@ -5,7 +5,7 @@ EPSG Codes that are not recognized by lastools:
 3721
 3640 - this is bad, as is in feet (NAD83(NSRS2007)/Oklahoma North (ftUS))
 
-29018 doesn't actually exist... checked metadata of 36095_D72_b.las and seems to be below - figure out equivalent... make sure all of these files are in the same projection:
+29018 doesn't actually exist... - should be 26914 checked metadata of 36095_D72_b.las and seems to be as listed below.  The only difference, according to  - figure out equivalent... make sure all of these files are in the same projection:
 M:\OK_LiDAR\OK_LAS_data\OK_DamRehabAssessment_5_6_2012\OK_DamRehabAssessment5_2012\SP_OK_North\UTM14\LAS_1.2
 						<gridsysn>Universal Transverse Mercator</gridsysn>
 					<utm>
