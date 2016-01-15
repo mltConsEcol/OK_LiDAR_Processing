@@ -6,18 +6,19 @@
 #Example Code
 #
 # setwd("~")
-# source("../../../data/users/mtreglia/OK_LiDAR_Processing/Metadata_Read_Edit/LAS_MetadataExtract_unix.R")
-# source("../../../data/users/mtreglia/OK_LiDAR_Processing/Metadata_Read_Edit/LAS_batch_EPSGfix_unix.R")
+# source("/data/users/mtreglia/OK_LiDAR_Processing/Metadata_Read_Edit/LAS_MetadataExtract_unix.R")
+# source("/data/users/mtreglia/OK_LiDAR_Processing/Metadata_Read_Edit/LAS_batch_EPSGfix_unix.R")
 #
 # Set Working Directory
-# setwd("M:/OK_LiDAR/RCode_Testing")
-# setwd("../../../data/groups/OK_LiDAR/RCode_Testing/Mixed_RealFiles")
+# setwd("/data/groups/OK_LiDAR/RCode_Testing/Mixed_RealFiles")
 #
 # path <- getwd()
 # epsgBad=29018
 # epsgDes=26914
 # cores=8
-# system.time(test3 <- las.batch.CRSfix(path=getwd(), epsgDes=26914, epsgBad=29018, cores=8, out="CRSfixTestLog.csv"))
+# system.time(test3 <- las.batch.EPSGfix(path=getwd(), epsgDes=26914, epsgBad=29018, cores=8, out="CRSfixTestLog.csv"))
+### Redo Metadata
+# system.time(testmeta <- las.metadataExtract(path=getwd(), cores=8, out="PostEPSGFixMeta.csv"))
 ################
 
 
