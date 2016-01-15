@@ -5,8 +5,9 @@
 # Tested on R version 3.1.3 x64 on Windows 8
 #Example Code
 #
-# source("../../../data/users/mtreglia/OK_LiDAR_Processing/Metadata_Read_Edit/LAS_CorrectProjectioninfo_unix.R")
+# setwd("~")
 # source("../../../data/users/mtreglia/OK_LiDAR_Processing/Metadata_Read_Edit/LAS_MetadataExtract_unix.R")
+# source("../../../data/users/mtreglia/OK_LiDAR_Processing/Metadata_Read_Edit/LAS_batch_EPSGfix_unix.R")
 #
 # Set Working Directory
 # setwd("M:/OK_LiDAR/RCode_Testing")
@@ -20,7 +21,7 @@
 ################
 
 
-las.batch.CRSfix <- function(path=path, epsgDes=epsgDes, epsgBad=epsgBad, cores=cores, out=out){
+las.batch.EPSGfix <- function(path=path, epsgDes=epsgDes, epsgBad=epsgBad, cores=cores, out=out){
   
   #import libraries
   library(foreach)
