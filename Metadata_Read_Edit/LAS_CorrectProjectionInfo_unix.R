@@ -13,13 +13,14 @@
 # setwd("../../../data/groups/OK_LiDAR/RCode_Testing/Mixed_RealFiles")
 #
 # path <- getwd()
-# epsgBad=26914
+# epsgBad=29018
 # epsgDes=26914
 # cores=8
+# system.time(test3 <- las.batch.CRSfix(path=getwd(), epsgDes=26914, epsgBad=29018, cores=8, out="CRSfixTestLog.csv"))
 ################
 
 
-las.batch.reproj <- function(path=path, epsgDes=epsgDes, epsgBad=epsgBad, cores=cores, out=out){
+las.batch.CRSfix <- function(path=path, epsgDes=epsgDes, epsgBad=epsgBad, cores=cores, out=out){
   
   #import libraries
   library(foreach)
@@ -41,12 +42,15 @@ las.batch.reproj <- function(path=path, epsgDes=epsgDes, epsgBad=epsgBad, cores=
     
     EPSG <- (substring(EPSG, 57, unlist(gregexpr(pattern =' - ', EPSG))[1]))
     
-    
-    if(as.integer(EPSG)==epsgBad){
+    if(is.na(EPSG)){
+      message <- c(file=lf[i], status='Warning: No EPSG Code Detected for File')
+    } else if(as.integer(EPSG)==epsgBad){
       system(paste('las2las  -i "', lf[i], '" -epsg "', epsgDes, '" -o "',
-                   las.noext[i], '_PrjDef_', epsg, '.las"', sep=''), intern=TRUE, wait=FALSE)
-      message <- c(file=lf[i], status=paste('Defined Projection Changed to ', epsgDes, ' from ', epsgBad, '.'))
-    }
+                   las.noext[i], '_PrjDef_', epsgDes, '.las"', sep=''), intern=TRUE, wait=FALSE)
+      message <- c(file=lf[i], status=paste('Defined Projection Changed'))#to ', epsgDes, ' from ', epsgBad, '.'
+    } else {
+      message <- c(lf[i], 'Already in Acceptable Projection')
+    } 
       
     return(message)
     
