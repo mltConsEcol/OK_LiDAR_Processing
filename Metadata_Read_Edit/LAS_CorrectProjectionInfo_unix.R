@@ -13,39 +13,53 @@
 # setwd("../../../data/groups/OK_LiDAR/RCode_Testing/Mixed_RealFiles")
 #
 # path <- getwd()
-# epsg=26914
-# 
+# epsgBad=26914
+# epsgDes=26914
+# cores=8
 ################
 
 
-#Set Working Directory
-#setwd("M:/OK_LiDAR/RCode_Testing") #Practice folder (8 las files total)
-setwd("M:/OK_LiDAR/OK_LAS_data")
-
-#Load metadata file
-las.meta <- read.csv("LAS_Metadata_ORIG.csv")
-
-#Get 
-las.meta.noEPSG <- as.character(las.meta[is.na(las.meta$epsg),1])
-
-#las.meta.noEPSG <- sub('./', '/', las.meta.noEPSG)
-
-las.meta.noEPSG_noext <- sub('.las', '', las.meta.noEPSG)
-
-
-library(foreach)
-library(doParallel)
-
-cl<- makeCluster(8)
-registerDoParallel(cl)
-
-system.time(foreach(i= 1:length(las.meta.noEPSG)) %dopar% {
-  if(grepl(pattern='Sallisaw_2006', las.meta.noEPSG[i])==TRUE){
-    system(paste('cmd /c las2las  -i "', las.meta.noEPSG[i], '" -epsg 26915 -o "', las.meta.noEPSG_noext[i], '_PrjAdd.las"', sep=''), intern=TRUE, wait=FALSE)
-  } else {
-    system(paste('cmd /c las2las  -i "', las.meta.noEPSG[i], '" -epsg 26914 -o "', las.meta.noEPSG_noext[i], '_PrjAdd.las"', sep=''), intern=TRUE, wait=FALSE)
+las.batch.reproj <- function(path=path, epsgDes=epsgDes, epsgBad=epsgBad, cores=cores, out=out){
+  
+  #import libraries
+  library(foreach)
+  library(doParallel)
+  
+  lf <- list.files(path=path, pattern="\\.las$", full.name=TRUE, include.dirs=TRUE, recursive=TRUE)
+  
+  las.noext <- sub('.las', '', lf)
+  
+  cl<- makeCluster(cores)
+  registerDoParallel(cl)
+  
+  reproj.status <- foreach(i= 1:length(lf), .combine=rbind) %dopar% {
+    
+    tmp <- system(paste('lasinfo  "', lf[i], '" -cd 2>&1', sep=''), intern=TRUE, wait=FALSE)
+    
+    
+    EPSG <- ifelse(length(tmp[(grep(pattern='key 3072', tmp))])==0, NA, tmp[(grep(pattern='key 3072', tmp))])
+    
+    EPSG <- (substring(EPSG, 57, unlist(gregexpr(pattern =' - ', EPSG))[1]))
+    
+    
+    if(as.integer(EPSG)==epsgBad){
+      system(paste('las2las  -i "', lf[i], '" -epsg "', epsgDes, '" -o "',
+                   las.noext[i], '_PrjDef_', epsg, '.las"', sep=''), intern=TRUE, wait=FALSE)
+      message <- c(file=lf[i], status=paste('Defined Projection Changed to ', epsgDes, ' from ', epsgBad, '.'))
+    }
+      
+    return(message)
+    
+  }    
+  
+  stopCluster(cl)
+  
+  reproj.status <- data.frame(reproj.status, stringsAsFactors=FALSE)
+  if(hasArg(out)==TRUE){
+    write.csv(reproj.status, out, row.names=FALSE)
   }
   
-})
+  return(reproj.status)
+  
+}
 
-stopCluster(cl)
