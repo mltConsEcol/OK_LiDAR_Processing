@@ -10,6 +10,7 @@ source("L:/OK_LiDAR_Processing/Metadata_Read_Edit/LAS_MetadataExtract.R")
 
 source("L:/OK_LiDAR_Processing/FileManipulation/LAS_Reprojection.R")
 
+
 setwd("M:/OK_LiDAR/OK_LAS_data")
 
 ## Get Metadata prior on original directory, after all files are uncompressed
@@ -29,7 +30,8 @@ setwd("M:/OK_LiDAR/OK_LAS_data")
 ##Ran this function in Linux VM: 
 
 # setwd("~")
-# source("../../../data/users/mtreglia/OK_LiDAR_Processing/Metadata_Read_Edit/LAS_MetadataExtract_unix.R")
+#
+
 # setwd("../../../data/groups/OK_LiDAR/OK_LAS_data/")
 # system.time(LAS_Metadata_PostFailedReprj <- las.metadataExtract(path=getwd(), cores=4, out="LAS_Metadata_PostFailedReprj_20151130.csv"))
 
@@ -43,3 +45,19 @@ setwd("M:/OK_LiDAR/OK_LAS_data")
 #   * For each file create minimum concave polygon... put everything into a single shapefile or geojson or similar
 #     * Have all .las files somehow indexed to respective polygons for spatial query
 ###############
+
+
+## 20160202 - Removed all Reprj26914 files because they may not have been correctly reprojected depending on source EPSG
+
+##Run to fix EPSG 29018 and convert to EPSG 26914 #Started 20160202
+#
+
+# setwd("~/../../../data/groups/OK_LiDAR/OK_LAS_data/")
+#
+# path <- getwd()
+# epsgBad=29018
+# epsgDes=26914
+# cores=8
+# system.time(CRSfixLog20160202 <- las.batch.EPSGfix(path=getwd(), epsgDes=26914, epsgBad=29018, cores=8, out="CRSfixLog20160202.csv"))
+### Redo Metadata
+# system.time(PostEPSGgFixMeta <- las.metadataExtract(path=getwd(), cores=8, out="PostEPSGFixMeta.csv"))
