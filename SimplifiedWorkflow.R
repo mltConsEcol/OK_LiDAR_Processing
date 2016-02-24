@@ -61,3 +61,29 @@ setwd("M:/OK_LiDAR/OK_LAS_data")
 # system.time(CRSfixLog20160202 <- las.batch.EPSGfix(path=getwd(), epsgDes=26914, epsgBad=29018, cores=8, out="CRSfixLog20160202.csv"))
 ### Redo Metadata
 # system.time(PostEPSGgFixMeta <- las.metadataExtract(path=getwd(), cores=8, out="PostEPSGFixMeta.csv"))
+
+### Remove Files w/ No EPSG Code and with EPSG 29018
+# 
+# setwd("~")
+# setwd("../../../data/groups/OK_LiDAR/OK_LAS_data/")
+# 
+# meta <- read.csv("PostEPSGFixMeta.csv", stringsAsFactors = FALSE)
+# 
+# meta.bad.files <- meta[which(is.na(meta$epsgHoriz)|meta$epsgHoriz=="29018"),1]
+# 
+# ## Doing this twice over-write files with duplicate names in different folders - this should be okay since these files were bad anyway
+# system.time(for(i in 1:length(meta.bad.files)){
+#   file.rename(from=meta.bad.files[i], to=paste("../BadFiles/", (unlist(strsplit(meta.bad.files[i], split="/"))[length(unlist(strsplit(meta.bad.files[i], split="/")))]), sep=""))
+# })
+# 
+# system.time(for(i in 1:length(meta.bad.files)){
+#   file.rename(from=meta.bad.files[i], to=paste("../BadFiles/", (unlist(strsplit(meta.bad.files[i], split="/"))[length(unlist(strsplit(meta.bad.files[i], split="/")))]), sep=""))
+# })
+
+
+#### Reproject all data to EPSG 26914 (the majority projection)
+setwd("~")
+source("../../../data/users/mtreglia/OK_LiDAR_Processing/FileManipulation/LAS_Reprojection_unix.R")
+setwd("../../../data/groups/OK_LiDAR/OK_LAS_data/")
+
+system.time(ReprojLog_20160224 <- las.batch.reproj(path = getwd(), epsg=26914, cores=8, out="ReprojLog20160224.csv"))
